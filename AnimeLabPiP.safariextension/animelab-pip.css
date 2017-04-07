@@ -20,27 +20,3 @@
 		top: -20px !important;
 	}
 }
-
-#pip-background-overlay-container {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	z-index: 1001;
-}
-
-#pip-background-filter {
-	-webkit-backdrop-filter: blur(20px) brightness(50%) contrast(120%);
-	position: absolute;
-	width: 100%;
-	height: 100%;
-}
-
-#pip-background-image {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	background-repeat: no-repeat;
-	background-position: center;
-	background-size: contain;
-	background-color: #000;
-}

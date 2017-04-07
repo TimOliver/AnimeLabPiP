@@ -23,36 +23,6 @@
 
 (function () {
 
-	var previousVideoThumbnailURL = "";
-	var currentVideoThumbnailURL = "";
-	var nextVideoThumbnailURL = "";
-
-	var setUpBackgroundOverlay = function() {
-		var backgroundContainer = document.querySelector("#pip-background-overlay-container");
-		if (backgroundContainer != null) { return; }
-
-		backgroundContainer = document.createElement("div");
-		backgroundContainer.id = "pip-background-overlay-container";
-		document.querySelector("#video-component-wrapper").appendChild(backgroundContainer);
-
-		var imageElement = document.createElement("div");
-		imageElement.id = "pip-background-image";
-		var overlayElement = document.createElement("div");
-		overlayElement.id = "pip-background-filter";
-
-		backgroundContainer.appendChild(imageElement);
-		backgroundContainer.appendChild(overlayElement);
-		
-		// Grab the metadata image for this episode and attach it to the overlay
-		// (This should preload the image data so it'll be ready by the time we need it)
-		// var thumbnailElement = document.querySelector('[property="og:image"]');
-		// if (thumbnailElement == null) { return; }
-		// var thumbnailURL = 'http:' + thumbnailElement.content;
-		
-		// // Apply the thumbnail image to our image element
-		// imageElement.style.backgroundImage = "url('" + thumbnailURL + "')";
-	};
-
 	var setUpPiPButton = function() {
 		// Find the player container
 		var container = document.querySelector('.video-controls');
@@ -73,27 +43,6 @@
 		container.appendChild(pipButton);
 	};
 
-	var videoContainerDidMutate = function(mutations) {
-		mutations.forEach(function(mutation) {
-    		var node = mutation.addedNodes.item(0);
-    		if (node == null) { return; }
-    		if (node.className != '') {
-    			// Update wallpaper
-    		}
-  		});
-	};
-
-	var setUpVideoContainerObserver = function() {
-		// The video wrapper div is present in the initial DOM, but is initially empty.
-		// Register an observer to detect when the video component is set up.
-		var target = document.querySelector('#video-component-wrapper');
-		
-		// Create the observer and attach our callback function
-		var observer = new MutationObserver(videoContainerDidMutate);
-		var config = { childList: true };
-		observer.observe(target, config);
-	};
-
 	var didLoadDomContent = function(event) {
 		// Confirm we're on the player page before proceeding
 		if (!/animelab\.com\/player\//i.test(window.location.href)) { return; }
@@ -104,12 +53,6 @@
 
 		// Create a PiP button and attach it to the player controls
 		setUpPiPButton();
-
-		// Set up the background view visible while PiP is active
-		setUpBackgroundOverlay();
-
-		// Set up the video container observer
-		setUpVideoContainerObserver();
 	};
 
 	// Detect when the HTML content has completed loading
