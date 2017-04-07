@@ -9,7 +9,7 @@
 		document.querySelector("#video-component-wrapper").appendChild(backgroundContainer);
 
 		var imageElement = document.createElement("div");
-		imageElement.id = "pip-background-iamge";
+		imageElement.id = "pip-background-image";
 		var overlayElement = document.createElement("div");
 		overlayElement.id = "pip-background-filter";
 
