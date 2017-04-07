@@ -27,6 +27,8 @@
 	var currentVideoThumbnailURL = "";
 	var nextVideoThumbnailURL = "";
 
+	var videoInPiP = false;
+
 	var setUpBackgroundOverlay = function() {
 		var backgroundContainer = document.querySelector("#pip-background-overlay-container");
 		if (backgroundContainer != null) { return; }
@@ -42,15 +44,58 @@
 
 		backgroundContainer.appendChild(imageElement);
 		backgroundContainer.appendChild(overlayElement);
+	};
+
+	var videoPresentationDidChange = function(event) {
+		var video = document.querySelector("video.jw-video");
+		videoInPiP = video.webkitPresentationMode == "picture-in-picture";
+
+		// Update overlay view as needed
+		var overlayView = document.querySelector("#pip-background-overlay-container");
+		if (overlayView) {
+			overlayView.style.display = videoInPiP ? "block" : "none";
+		}
+	}
+
+	// Take an image URL, and isolate the first group of numbers in
+	// the file name component.
+	var getImageID = function(url) {
+		var firstIndex = url.lastIndexOf('/');	 // Get to the file portion of the URL
+		var imageID = url.substring(firstIndex); // Isolate the file portion
+		var lastIndex = imageID.indexOf('_'); // Isolate the portion up to the first underscore
+		return imageID.substring(0, lastIndex);  // Isolate just that part of the file na,m
+	}
+
+	var compareImageIDsInURLs = function(url1, url2) {
+		return (getImageID(url1) == getImageID(url2));
+	};
+
+	var updateBackgroundOverlayImages = function() {
+		// Set up the initial thumbnail on page load
+		if (currentVideoThumbnailURL == "") {
+			currentVideoThumbnailURL = 'https:' + document.querySelector('[property="og:image"]').content;
+		}
+
+		var nextImage = document.querySelector("#next-video-container img");
+		var prevImage = document.querySelector("#prev-video-container img");
+
+		var nextURL = (nextImage != null) ? nextImage.src : "";
+		var previousURL = (prevImage != null) ? prevImage.src : "";
 		
-		// Grab the metadata image for this episode and attach it to the overlay
-		// (This should preload the image data so it'll be ready by the time we need it)
-		// var thumbnailElement = document.querySelector('[property="og:image"]');
-		// if (thumbnailElement == null) { return; }
-		// var thumbnailURL = 'http:' + thumbnailElement.content;
-		
-		// // Apply the thumbnail image to our image element
-		// imageElement.style.backgroundImage = "url('" + thumbnailURL + "')";
+		// Check to see if we moved forward or backward in video progression
+		if (compareImageIDsInURLs(currentVideoThumbnailURL, previousURL)) {
+			currentVideoThumbnailURL = nextVideoThumbnailURL;
+		}
+
+		if (compareImageIDsInURLs(currentVideoThumbnailURL, nextURL)) {
+			currentVideoThumbnailURL = previousVideoThumbnailURL;
+		}
+
+		previousVideoThumbnailURL = previousURL;
+		nextVideoThumbnailURL = nextURL;
+
+		// Apply the thumbnail image to our image element
+		document.querySelector("#pip-background-image").style.backgroundImage = "url('" + currentVideoThumbnailURL + "')";
 	};
 
 	var setUpPiPButton = function() {
@@ -69,8 +114,6 @@
 			video.webkitSetPresentationMode(video.webkitPresentationMode == "inline" ? "picture-in-picture" : "inline");
    		});
 
-		//video.addEventListener("webkitpresentationmodechanged", function() { console.log('Woah'); });
-
 		// Append to the container controller
 		container.appendChild(pipButton);
 	};
@@ -80,29 +123,26 @@
     		var node = mutation.addedNodes.item(0);
     		if (node == null) { return; }
     		if (node.className != '') {
-    			// Update wallpaper
+    			var video = document.querySelector("video.jw-video");
+    			video.addEventListener("webkitpresentationmodechanged", videoPresentationDidChange);
     		}
   		});
 	};
 
-	var setUpVideoContainerObserver = function() {
-		// The video wrapper div is present in the initial DOM, but is initially empty.
-		// Register an observer to detect when the video component is set up.
-		var target = document.querySelector('#video-component-wrapper');
-		
-		// Create the observer and attach our callback function
+	var setUpMutationObservers = function() {
 		var observer = new MutationObserver(videoContainerDidMutate);
-		var config = { childList: true };
-		observer.observe(target, config);
+		observer.observe(document.querySelector("#video-component-wrapper"), {childList: true});
+
+		observer = new MutationObserver(updateBackgroundOverlayImages);
+		observer.observe(document.querySelector("#next-video-container"), {childList: true, subtree: true});
+
+		observer = new MutationObserver(updateBackgroundOverlayImages);
+		observer.observe(document.querySelector("#prev-video-container"), {childList: true, subtree: true});
 	};
 
 	var didLoadDomContent = function(event) {
 		// Confirm we're on the player page before proceeding
 		if (!/animelab\.com\/player\//i.test(window.location.href)) { return; }
-
-		// Test to see if video tags in this version of Safari support PiP
-		var video = document.createElement("video");
-		if (!video.webkitSupportsPresentationMode) { return; }
 
 		// Create a PiP button and attach it to the player controls
 		setUpPiPButton();
@@ -111,7 +151,7 @@
 		setUpBackgroundOverlay();
 
 		// Set up the video container observer
-		setUpVideoContainerObserver();
+		setUpMutationObservers();
 	};
 
 	// Detect when the HTML content has completed loading
