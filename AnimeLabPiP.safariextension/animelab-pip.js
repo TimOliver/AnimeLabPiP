@@ -69,6 +69,8 @@
 			video.webkitSetPresentationMode(video.webkitPresentationMode == "inline" ? "picture-in-picture" : "inline");
    		});
 
+		//video.addEventListener("webkitpresentationmodechanged", function() { console.log('Woah'); });
+
 		// Append to the container controller
 		container.appendChild(pipButton);
 	};
