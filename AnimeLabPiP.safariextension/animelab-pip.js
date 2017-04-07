@@ -9,13 +9,13 @@
 		document.querySelector("#video-component-wrapper").appendChild(backgroundContainer);
 
 		var imageElement = document.createElement("div");
-		imageElement.id = "pip-background-filter";
+		imageElement.id = "pip-background-iamge";
 		var overlayElement = document.createElement("div");
-		overlayElement.id = "pip-background-image";
+		overlayElement.id = "pip-background-filter";
 
-		backgroundContainer.appendChild(overlayElement);
 		backgroundContainer.appendChild(imageElement);
-
+		backgroundContainer.appendChild(overlayElement);
+		
 		// Grab the metadata image for this episode and attach it to the overlay
 		// (This should preload the image data so it'll be ready by the time we need it)
 		var thumbnailElement = document.querySelector('[property="og:image"]');
@@ -23,7 +23,7 @@
 		var thumbnailURL = 'http:' + thumbnailElement.content;
 		
 		// Apply the thumbnail image to our image element
-		imageElement.style.backgroundImage = "url('" + thumbnailURL + "');";
+		imageElement.style.backgroundImage = "url('" + thumbnailURL + "')";
 	};
 
 	var contentLoadedCallback = function(event) {
