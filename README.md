@@ -10,7 +10,7 @@
 
 1. [Download the Safari extension](https://github.com/TimOliver/AnimeLabPiP/releases/download/1.0.0/AnimeLabPiP.safariextz)
 2. Open the extension on a Mac to install it in Safari.
-3. Watch a video on AnimeLab using Safari.
+3. Watch a video on [AnimeLab](http://animelab.com) using Safari.
 
 # Features
 
