@@ -2,21 +2,45 @@
 	background-image: url(btn-video-pip.png);
     position: absolute;
     top: -10px;
-    left: 90px;
+    right: 25px;
 }
 
 .video-overlayer .video-controls .video-fullscreen {
-	left: 35px !important;
+	left: 25px !important;
 }
 
 @media (min-width:992px) {
 	.video-overlayer .video-controls .video-fullscreen {
-	    left: 40px !important;
+	    left: 25px !important;
 	    top: -20px !important;
 	}
 
 	.video-overlayer .video-controls .video-pip {
-		left: 122px !important;
+		right: 25px !important;
 		top: -20px !important;
 	}
+}
+
+#pip-background-overlay-container {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 1001;
+}
+
+#pip-background-filter {
+	-webkit-backdrop-filter: blur(20px) brightness(50%) contrast(120%);
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+#pip-background-image {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+	background-color: #000;
 }
