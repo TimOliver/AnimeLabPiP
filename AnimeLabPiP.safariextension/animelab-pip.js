@@ -116,6 +116,12 @@
 
 		// Append to the container controller
 		container.appendChild(pipButton);
+
+		// Set up the 'fullscreen' button to cancel PiP mode
+		document.querySelector(".video-fullscreen").addEventListener("click", function(event) {
+			var video = document.querySelector("video.jw-video");
+			video.webkitSetPresentationMode("inline");
+		});
 	};
 
 	var videoContainerDidMutate = function(mutations) {
