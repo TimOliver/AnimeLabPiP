@@ -44,3 +44,5 @@ Madman Entertainment Pty Ltd has full, unconditional permission to take possessi
 This is an unofficial third party modification, and is neither officially endorsed or acknowledged by the copyright holder.
 
 *Attack on Titan* © Hajime Isayama, Kondansha Ltd. Usage of said imagery is for illustrative purposes and claimed under fair use pursuant to U.S. copyright law.
+
+![analytics](https://ga-beacon.appspot.com/UA-5643664-16/AnimeLabPiP/README.md?pixel)
